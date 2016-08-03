@@ -37,13 +37,22 @@ body {
 
 <div class="container">
     <div class="jumbotron">
-        <h1>P.rogramming</h1>
-        <p>
-        {% for post in post_list %}
-          {{ post.title }}
-          {{ post.content }}
-        {% endfor %}
-        </p>
+
+    {% for post in post_list %}
+    {% for comment in post.comment_set.all %}
+
+
+        <h1>글</h1><h3>{{post.title}}</h3>
+        <h2>{{post.content}}</h2>
+        <h1>댓글</h1>
+        <h2> {{comment.post}}</h2>
+        <h2> {{comment.author}}</h2>
+        <h2> {{comment.message}}</h2>
+     {% endfor %}
+
+    {% endfor %}
+
+
     </div>
 </div>
 
@@ -55,4 +64,6 @@ body {
 
 </body>
 </html>
+
+
 
