@@ -5,7 +5,7 @@ from django.forms import ValidationError
 from django.utils.deconstruct import deconstructible
 import xmltodict
 
-
+'''mail validator'''
 @deconstructible
 class MinLengthValidator(object):
     def __init__(self, min_length):
@@ -24,11 +24,15 @@ class ZipCodeValidator(object):
         self.is_check_exist = is_check_exist
 
     def __call__(self, zip_code):
-        if not re.match(r'^\d{5}$', zip_code):
-            raise ValidationError('5자리 숫자로 입력해주세요.')
+        if not re.match(r'^\d{5,6}$', zip_code):
+            raise ValidationError('5자리 혹은 6자리 숫자로 입력해주세요.')
 
         if self.is_check_exist:
-            self.check_exist(zip_code)
+            self.check_exist_from_db(zip_code)
+    def check_exist_from_dv(self, zip_code):
+        from blog.models import ZipCode
+        if not ZipCode.objects.filter(code=zip_code).exits():
+            raise ValidationError('없는 우편번호입니다.')
 
     def check_exist(self, zip_code):
         '우체국 open api : http://biz.epost.go.kr/customCenter/custom/custom_10.jsp'
@@ -60,6 +64,7 @@ def max_length_validator(max_length):
             raise ValidationError('{}글자 이하 입력해주세요.'.format(max_length))
     return wrap
 '''
+
 
 
 def lnglat_validator(value):
